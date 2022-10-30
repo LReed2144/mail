@@ -52,7 +52,8 @@ fetch(`/emails/${mailbox}`)
     `;
 
     //toggle read or not
-    
+    newEmail.className = singleEmail.read ? 'read' : 'undread';
+    //add click event to view email
     newEmail.addEventListener('click', function() {
     console.log('This element has been clicked!')
 });
@@ -88,3 +89,8 @@ function send_email(event) {
 
 }
 
+function send_email(event){
+
+}
+
+function view_email()
