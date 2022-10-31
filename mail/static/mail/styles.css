@@ -9,3 +9,7 @@ textarea {
 .unread {
     background-color: white;
 }
+
+.space {
+    padding-right: 20px;
+}

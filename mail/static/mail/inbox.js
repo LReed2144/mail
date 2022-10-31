@@ -31,7 +31,7 @@ function view_email(id) {
   fetch(`/emails/${id}`)
 .then(response => response.json())
 .then(email => {
-    // Print email
+    //Print email
     console.log(email);
     
     document.querySelector(`#emails-view`).style.display = 'none';
@@ -48,6 +48,7 @@ function view_email(id) {
       <br><hr><br>
       `
 
+
     // Change to read
     if(!email.read){
       fetch(`/emails/${email.id}`, {
@@ -58,7 +59,24 @@ function view_email(id) {
       })
     }
 
-    //Archieve button
+     //reply button
+     const btn_reply = document.createElement('button');
+     btn_reply.innerHTML = "Reply"
+     btn_reply.className = "btn btn-primary";
+     btn_reply.addEventListener('click', function() {
+     compose_email();
+ 
+       document.querySelector('#compose-recipients').value = email.sender;
+       let subject_title = email.subject;
+       if(subject_title.split(' ',1)[0] !="Re:"){
+        subject_title = "Re: " + email.subject;
+       } 
+       document.querySelector('#compose-subject').value = subject_title;
+       document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}`;
+     });
+     document.querySelector('#details-view').append(btn_reply);
+   
+    //Archive button
     const btn_arch = document.createElement('button');
     btn_arch.innerHTML = email.archived ? "Unarchive" : "Archive";
     btn_arch.className = email.archived ? "btn btn-success" : "btn btn-danger";
@@ -72,9 +90,9 @@ function view_email(id) {
       })
       .then(() => { load_mailbox('archive')})
     });
-    document.querySelector('#details-view').append(btn_arch);
-    });
-  }
+    document.querySelector('#details-view').append(btn_arch)
+  });
+}
 
 function load_mailbox(mailbox) {
   
@@ -103,7 +121,7 @@ fetch(`/emails/${mailbox}`)
     `;
 
     //Toggle read or not
-    newEmail.className = singleEmail.read ? 'read' : 'undread';
+    newEmail.className = singleEmail.read ? 'read' : 'unread';
     //add click event to view email
     newEmail.addEventListener('click', function() {
       view_email(singleEmail.id)
@@ -112,7 +130,6 @@ document.querySelector('#emails-view').append(newEmail);
   })
 });
 }
-
 
 function send_email(event) {
   event.preventDefault();
@@ -140,7 +157,5 @@ function send_email(event) {
 
 }
 
-function send_email(event){
 
-}
 
