@@ -43,8 +43,9 @@ function view_email(id) {
       <strong>To: </strong>${email.recipients}<br>
       <strong>Subject: </strong>${email.subject}<br>
       <strong>Timestamp: </strong>${email.timestamp}<br>
-    <br><hr>
+      <br><hr>
       ${email.body}
+      <br><hr><br>
       `
 
     // Change to read
@@ -56,8 +57,24 @@ function view_email(id) {
         })
       })
     }
-  });
-}
+
+    //Archieve button
+    const btn_arch = document.createElement('button');
+    btn_arch.innerHTML = email.archived ? "Unarchive" : "Archive";
+    btn_arch.className = email.archived ? "btn btn-success" : "btn btn-danger";
+    //Toggle archive
+    btn_arch.addEventListener('click', function() {
+      fetch(`/emails/${email.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: !email.archived
+        })
+      })
+      .then(() => { load_mailbox('archive')})
+    });
+    document.querySelector('#details-view').append(btn_arch);
+    });
+  }
 
 function load_mailbox(mailbox) {
   
